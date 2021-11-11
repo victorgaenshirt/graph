@@ -30,6 +30,7 @@ public class AdjacencyListDirectedGraph<V> implements DirectedGraph<V> {
 
     private int numberEdge = 0;
 
+
 	@Override
 	public boolean addVertex(V v) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -37,11 +38,26 @@ public class AdjacencyListDirectedGraph<V> implements DirectedGraph<V> {
 
     @Override
     public boolean addEdge(V v, V w, double weight) {
+
+		if ( ! succ.containsKey(v)) {
+			succ.add(new TreeMap<>());
+		}
+
+		if ( ! pred.containsKey(w)) {
+			pred.add(new TreeMap<>());
+		}
+
+		succ.get(v).put(w, weight);
+		pred.get(w).put(v, weight);
+
+
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public boolean addEdge(V v, V w) {
+		addEdge(v, w, 1);
+
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
