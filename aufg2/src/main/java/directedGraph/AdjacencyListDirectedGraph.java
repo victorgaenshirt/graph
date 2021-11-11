@@ -40,11 +40,11 @@ public class AdjacencyListDirectedGraph<V> implements DirectedGraph<V> {
     public boolean addEdge(V v, V w, double weight) {
 
 		if ( ! succ.containsKey(v)) {
-			succ.add(new TreeMap<>());
+			succ.put(v, new TreeMap<V, Double>());
 		}
 
 		if ( ! pred.containsKey(w)) {
-			pred.add(new TreeMap<>());
+			pred.put(w, new TreeMap<V, Double>());
 		}
 
 		succ.get(v).put(w, weight);
