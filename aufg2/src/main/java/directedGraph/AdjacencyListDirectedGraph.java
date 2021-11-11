@@ -3,10 +3,9 @@
 
 package directedGraph;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.Set;
+import com.sun.source.tree.Tree;
+
+import java.util.*;
 
 /**
  * Implementierung von DirectedGraph mit einer doppelten TreeMap 
@@ -21,7 +20,7 @@ import java.util.Set;
  * @since 19.03.2018
  * @param <V> Knotentyp.
  */
-public class AdjacencyListDirectedGraph<V> implements DirectedGraph<V> {
+public class AdjacencyListDirectedGraph<V> implements DirectedGraph<V>, Iterable {
     // doppelte Map für die Nachfolgerknoten:
     private final Map<V, Map<V, Double>> succ = new TreeMap<>(); 
     
@@ -29,62 +28,74 @@ public class AdjacencyListDirectedGraph<V> implements DirectedGraph<V> {
     private final Map<V, Map<V, Double>> pred = new TreeMap<>(); 
 
     private int numberEdge = 0;
+	private int numberVertexes = 0;
 
 
 	@Override
 	public boolean addVertex(V v) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+		if ( containsVertex(v) ) {
+			return false;
+		}
+
+		succ.put(v, new TreeMap<V, Double>());
+		pred.put(v, new TreeMap<V, Double>());
+		numberVertexes++;
+		return true;
     }
 
     @Override
     public boolean addEdge(V v, V w, double weight) {
 
-		if ( ! succ.containsKey(v)) {
-			succ.put(v, new TreeMap<V, Double>());
+		if (containsEdge(v,w)) {
+			succ.get(v).replace(w, weight);
+			return false;
 		}
 
-		if ( ! pred.containsKey(w)) {
-			pred.put(w, new TreeMap<V, Double>());
-		}
+		addVertex(v);
+		addVertex(w);
 
 		succ.get(v).put(w, weight);
 		pred.get(w).put(v, weight);
-
-
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		numberEdge++;
+		return true;
     }
 
     @Override
     public boolean addEdge(V v, V w) {
-		addEdge(v, w, 1);
+		return addEdge(v, w, 1);
 
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public boolean containsVertex(V v) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return succ.containsKey(v);
     }
 
     @Override
     public boolean containsEdge(V v, V w) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		if (succ.containsKey(v)) {
+			if (succ.get(v).containsKey(w)) {
+				return true;
+			}
+		}
+		return false;
     }
 
     @Override
     public double getWeight(V v, V w) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return succ.get(v).get(w);
     }
 
 	
     @Override
     public int getInDegree(V v) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return pred.get(v).size();
     }
 
     @Override
     public int getOutDegree(V v) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return succ.get(v).size();
     }
 	
 	@Override
@@ -94,22 +105,22 @@ public class AdjacencyListDirectedGraph<V> implements DirectedGraph<V> {
 
     @Override
     public Set<V> getPredecessorVertexSet(V v) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return Collections.unmodifiableSet(pred.get(v).keySet());
     }
 
     @Override
     public Set<V> getSuccessorVertexSet(V v) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return Collections.unmodifiableSet(succ.get(v).keySet());
     }
 
     @Override
     public int getNumberOfVertexes() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return numberVertexes;
     }
 
     @Override
     public int getNumberOfEdges() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return numberEdge;
     }
 	
 	@Override
@@ -118,10 +129,36 @@ public class AdjacencyListDirectedGraph<V> implements DirectedGraph<V> {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
-	
+
+	/*
+		gibt alle Kanten des Graphen aus in der folgenden Darstellung:
+		// 1 --> 2 weight = 1.0
+		// 2 --> 5 weight = 1.0
+		// 2 --> 6 weight = 1.0
+		// 3 --> 7 weight = 1.0
+		// ...
+
+	 */
 	@Override
 	public String toString() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		StringBuilder sb = new StringBuilder();
+
+////		Set<V> set = getVertexSet();
+//		for (V v : set) {
+////			System.out.println("hallo");
+//
+//			Set<V> innerSet = v.
+////			succ.get(v).keySet()
+//			String tmp = v.toString() + " --> " + "";
+//			sb.append();
+//		}
+
+//		Set<V> set = succ.keySet();
+//		for ( V knoten: set ) {
+////			Map<V, Double> innerMap =
+//			knoten.
+//		}
+		return null;
 	}
 	
 	
@@ -171,5 +208,38 @@ public class AdjacencyListDirectedGraph<V> implements DirectedGraph<V> {
 		Set<Integer> s = g.getSuccessorVertexSet(2);
 		System.out.println(s);
 		s.remove(5);	// Laufzeitfehler! Warum?
+	}
+
+	@Override
+	public Iterator iterator() {
+		return new AdjacencyListDirectedGraphIterator();
+	}
+
+	private class AdjacencyListDirectedGraphIterator implements Iterator {
+
+		int counterEdges = 0;
+
+		@Override
+		public boolean hasNext() {
+			if (counterEdges < numberEdge) {
+				return true;
+			}
+			return false;
+		}
+
+		@Override
+		public Object next() {
+//			private final Map<V, Map<V, Double>> succ = new TreeMap<>();
+
+			Set<V> keys = getVertexSet();
+
+			for ( V vertex: keys ) {
+				succ.get(vertex);
+//				TreeMap<V, Double> edgeListForVertex = succ.get(vertex);
+			}
+
+			counterEdges++;
+			return null;
+		}
 	}
 }
