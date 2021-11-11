@@ -3,8 +3,6 @@
 
 package directedGraph;
 
-import com.sun.source.tree.Tree;
-
 import java.util.*;
 
 /**
@@ -143,22 +141,20 @@ public class AdjacencyListDirectedGraph<V> implements DirectedGraph<V>, Iterable
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 
-////		Set<V> set = getVertexSet();
-//		for (V v : set) {
-////			System.out.println("hallo");
-//
-//			Set<V> innerSet = v.
-////			succ.get(v).keySet()
-//			String tmp = v.toString() + " --> " + "";
-//			sb.append();
-//		}
+// 3 --> 7 weight = 1.0
+		Set<Map.Entry<V, Map<V, Double>>> setKnoten = succ.entrySet();
 
-//		Set<V> set = succ.keySet();
-//		for ( V knoten: set ) {
-////			Map<V, Double> innerMap =
-//			knoten.
-//		}
-		return null;
+		for (Map.Entry<V, Map<V, Double>> entry : setKnoten) {
+
+			sb.append(entry.getKey().toString()+" => ") ;
+
+			for (Map.Entry<V, Double> kante : entry.getValue().entrySet())
+
+						sb.append(kante.getKey().toString() + " weight: " + kante.getValue() + "\n");
+		}
+
+		return sb.toString();
+
 	}
 	
 	
@@ -218,6 +214,7 @@ public class AdjacencyListDirectedGraph<V> implements DirectedGraph<V>, Iterable
 	private class AdjacencyListDirectedGraphIterator implements Iterator {
 
 		int counterEdges = 0;
+		Set<Map.Entry<V, Map<V, Double>>> setKnoten = succ.entrySet();
 
 		@Override
 		public boolean hasNext() {
@@ -229,17 +226,13 @@ public class AdjacencyListDirectedGraph<V> implements DirectedGraph<V>, Iterable
 
 		@Override
 		public Object next() {
-//			private final Map<V, Map<V, Double>> succ = new TreeMap<>();
 
-			Set<V> keys = getVertexSet();
-
-			for ( V vertex: keys ) {
-				succ.get(vertex);
-//				TreeMap<V, Double> edgeListForVertex = succ.get(vertex);
+			for (Map.Entry<V, Map<V, Double>> entry : setKnoten) {
+				counterEdges++;
+				return entry;
 			}
 
-			counterEdges++;
-			return null;
+		return null;
 		}
 	}
 }
