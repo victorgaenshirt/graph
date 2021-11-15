@@ -141,16 +141,23 @@ public class AdjacencyListDirectedGraph<V> implements DirectedGraph<V>, Iterable
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 
-// 3 --> 7 weight = 1.0
 		Set<Map.Entry<V, Map<V, Double>>> setKnoten = succ.entrySet();
 
-		for (Map.Entry<V, Map<V, Double>> entry : setKnoten) {
+		//geht seit Java 10 auch mit "var entry : ...". Bedeutet genau das gleiche wie die auskommentierte Zeile davor.
+//		for (Map.Entry<V, Map<V, Double>> entry : setKnoten) {
+		for (var entry : setKnoten) {
 
-			sb.append(entry.getKey().toString()+" => ") ;
+			//falls Knoten keine Successors hat dann continue
+			if (entry.getValue().isEmpty()) {
+				continue;
+			}
 
-			for (Map.Entry<V, Double> kante : entry.getValue().entrySet())
+			//geht seit Java 10 auch mit "var entry : ...". Bedeutet genau das gleiche wie die auskommentierte Zeile davor.
+//			for (Map.Entry<V, Double> kante : entry.getValue().entrySet())
+			for (var kante : entry.getValue().entrySet())
 
-						sb.append(kante.getKey().toString() + " weight: " + kante.getValue() + "\n");
+				sb.append(entry.getKey().toString()+" => ")
+						.append(kante.getKey().toString() + " weight = " + kante.getValue() + "\n");
 		}
 
 		return sb.toString();
