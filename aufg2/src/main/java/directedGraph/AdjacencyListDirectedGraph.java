@@ -18,7 +18,7 @@ import java.util.*;
  * @since 19.03.2018
  * @param <V> Knotentyp.
  */
-public class AdjacencyListDirectedGraph<V> implements DirectedGraph<V>, Iterable {
+public class AdjacencyListDirectedGraph<V> implements DirectedGraph<V> {
     // doppelte Map für die Nachfolgerknoten:
     private final Map<V, Map<V, Double>> succ = new TreeMap<>(); 
     
@@ -124,9 +124,26 @@ public class AdjacencyListDirectedGraph<V> implements DirectedGraph<V>, Iterable
 	@Override
     public 
 	DirectedGraph<V> invert() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
+		DirectedGraph<V> invertedGraph = new AdjacencyListDirectedGraph<V>();
 
+		Set<Map.Entry<V, Map<V, Double>>> setKnoten = succ.entrySet();
+
+		for (var entry : setKnoten) {
+
+			//falls Knoten keine Successors hat dann continue
+			if (entry.getValue().isEmpty()) {
+				continue;
+			}
+
+			for (var kante : entry.getValue().entrySet()) {
+				V oldV = entry.getKey();
+				V oldW = kante.getKey();
+				double oldWeight = kante.getValue();
+				invertedGraph.addEdge(oldW, oldV, oldWeight);
+			}
+		}
+		return invertedGraph;
+	}
 
 	/*
 		gibt alle Kanten des Graphen aus in der folgenden Darstellung:
@@ -135,7 +152,6 @@ public class AdjacencyListDirectedGraph<V> implements DirectedGraph<V>, Iterable
 		// 2 --> 6 weight = 1.0
 		// 3 --> 7 weight = 1.0
 		// ...
-
 	 */
 	@Override
 	public String toString() {
@@ -213,7 +229,7 @@ public class AdjacencyListDirectedGraph<V> implements DirectedGraph<V>, Iterable
 		s.remove(5);	// Laufzeitfehler! Warum?
 	}
 
-	@Override
+/*	@Override
 	public Iterator iterator() {
 		return new AdjacencyListDirectedGraphIterator();
 	}
@@ -241,5 +257,5 @@ public class AdjacencyListDirectedGraph<V> implements DirectedGraph<V>, Iterable
 
 		return null;
 		}
-	}
+	}*/
 }
