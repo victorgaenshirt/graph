@@ -32,12 +32,13 @@ public class TopologicalSort<V> {
 		while(q.size() != 0){
 			v = q.remove(); //siehe 7-23 ; was ist v hier ?
 			ts.add(v);
-			for(var suc : succ) {
+			for(var suc : v.getpredecessor) {
 				if(--inDegree[suc] == 0) { q.add(suc); }
 			}
 		}
-		if(ts.size() != g.numberVertexes) {return null;} //graph zyklisch
-		else {return ts;}
+		if(ts.size() != g.getNumberOfVertexes()) {
+			System.out.println("Graph ist zyklisch");} //graph zyklisch
+		else {return;}
     }
     
 	/**
