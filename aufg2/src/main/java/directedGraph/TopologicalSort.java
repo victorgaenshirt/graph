@@ -30,8 +30,8 @@ public class TopologicalSort<V> {
 		}
 
 		while(q.size() != 0){
-			v = q.remove();
-			ts.addVertex(v);
+			v = q.remove(); //siehe 7-23 ; was ist v hier ?
+			ts.add(v);
 			for(var suc : succ) {
 				if(--inDegree[suc] == 0) { q.add(suc); }
 			}
