@@ -15,14 +15,31 @@ import java.util.List;
  */
 public class TopologicalSort<V> {
     private List<V> ts = new LinkedList<>(); // topologisch sortierte Folge
-	// ...
+	int[] inDegree;
+	Queue<Vertex> q;
+
+
 
 	/**
 	 * Führt eine topologische Sortierung für g durch.
 	 * @param g gerichteter Graph.
 	 */
 	public TopologicalSort(DirectedGraph<V> g) {
-        // ...
+		for(var v : g) {
+			inDegree[v] = getPredecessorVertexSet(v); //?
+			if(inDegree[v] == 0)
+				q.add(v);
+		}
+
+		while(!q.empty()){
+			v = q.remove();
+			ts.addVertex(v);
+			for(var suc : succ) {
+				if(--inDegree[suc] == 0) { q.add(suc); }
+			}
+		}
+		if(ts.size() != g.numberVertexes) {return null;} //graph zyklisch
+		else {return ts;}
     }
     
 	/**
