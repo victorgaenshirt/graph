@@ -3,9 +3,7 @@
 
 package directedGraph;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Klasse zur Erstellung einer topologischen Sortierung.
@@ -15,8 +13,8 @@ import java.util.List;
  */
 public class TopologicalSort<V> {
     private List<V> ts = new LinkedList<>(); // topologisch sortierte Folge
-	int[] inDegree;
-	Queue<Vertex> q;
+	Map<V, Integer> inDegree = new TreeMap<>();
+	Queue<V> q;
 
 
 
@@ -25,13 +23,13 @@ public class TopologicalSort<V> {
 	 * @param g gerichteter Graph.
 	 */
 	public TopologicalSort(DirectedGraph<V> g) {
-		for(var v : g) {
-			inDegree[v] = getPredecessorVertexSet(v); //?
-			if(inDegree[v] == 0)
+		for(var v : g.getVertexSet()) {
+			inDegree.put(v, g.getNumberOfVertexes()); //?
+			if(inDegree.get(v) == 0)
 				q.add(v);
 		}
 
-		while(!q.empty()){
+		while(q.size() != 0){
 			v = q.remove();
 			ts.addVertex(v);
 			for(var suc : succ) {
