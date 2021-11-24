@@ -30,11 +30,10 @@ public class DepthFirstOrder<V> {
 
     }
 
-    /* ruft visitDFrec() für jede Zusammenhangskomponente auf*/
+    /* ruft visitDFRec() für jede Zusammenhangskomponente auf*/
     void visitDFAllNodes(DirectedGraph<V> g) {
 
         Set<V> besucht = new TreeSet<V>();
-
         Set<V> allVertexes = g.getVertexSet();
 
         for (var vertex : allVertexes) {
@@ -55,7 +54,7 @@ public class DepthFirstOrder<V> {
         // Bearbeite v:
 
         /* Aus der Aufgabenstellung:
-        Die  PreOrder-Reihenfolge  ergibt  sich,  indem  jeder  Knoten,  sobald  er
+        Die PreOrder-Reihenfolge ergibt sich, indem jeder Knoten, sobald er
         besucht wird, in eine Liste angehängt wird.
         */
         preOrder.add(v);
@@ -124,4 +123,5 @@ public class DepthFirstOrder<V> {
         System.out.println(dfs.postOrder());		// [5, 6, 2, 1, 4, 7, 3]
 
     }
+
 }

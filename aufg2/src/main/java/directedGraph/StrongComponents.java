@@ -5,10 +5,7 @@ package directedGraph;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * Klasse für Bestimmung aller strengen Komponenten.
@@ -34,7 +31,15 @@ public class StrongComponents<V> {
 	 * @param g gerichteter Graph.
 	 */
 	public StrongComponents(DirectedGraph<V> g) {
-		// ...
+		DepthFirstOrder<V> gAsDepthTree = new DepthFirstOrder<>(g);
+		List<V> p = gAsDepthTree.postOrder();
+		List<V> pInverted = new ArrayList<V>(p.size());
+
+		for (int i = p.size(); i > 0; i--) {
+			pInverted.add(i, p.get(i));
+		}
+
+		System.out.println(pInverted);
 	}
 	
 	/**
