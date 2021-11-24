@@ -38,6 +38,7 @@ public class StrongComponents<V> {
 		for (int i = p.size(); i > 0; i--) {
 			pInverted.add(i, p.get(i));
 		}
+	// Hier müssten die einträge zur map "comp" hinzugefügt werden (siehe test)
 
 		System.out.println(pInverted);
 	}
