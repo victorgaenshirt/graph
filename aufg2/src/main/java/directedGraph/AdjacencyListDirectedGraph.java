@@ -196,7 +196,10 @@ public class AdjacencyListDirectedGraph<V> implements DirectedGraph<V> {
 		System.out.println(g.getNumberOfVertexes());	// 7
 		System.out.println(g.getNumberOfEdges());		// 8
 		System.out.println(g.getVertexSet());	// 1, 2, ..., 7
-		System.out.println(g);
+
+        System.out.println();
+        System.out.println("g: ");
+        System.out.println(g);
 			// 1 --> 2 weight = 1.0 
 			// 2 --> 5 weight = 1.0
 			// 2 --> 6 weight = 1.0
@@ -217,7 +220,8 @@ public class AdjacencyListDirectedGraph<V> implements DirectedGraph<V> {
 		System.out.println(g.getWeight(1,2));	// 5.0	
 		
 		System.out.println("");
-		System.out.println(g.invert());
+        System.out.println("g inverted: ");
+        System.out.println(g.invert());
 			// 1 --> 5 weight = 1.0
 			// 2 --> 1 weight = 5.0
 			// 3 --> 4 weight = 1.0 
@@ -225,37 +229,19 @@ public class AdjacencyListDirectedGraph<V> implements DirectedGraph<V> {
 			// ...
 			
 		Set<Integer> s = g.getSuccessorVertexSet(2);
+        System.out.println("s: ");
 		System.out.println(s);
-		s.remove(5);	// Laufzeitfehler! Warum?
+//		s.remove(5);	// Laufzeitfehler! Warum?
+
+        /*
+         * Antwort:
+         *
+         * da s = g.getSuccessorVertexSet(2)
+         * und getSuccessorVertexSet hat als Rückgabewert
+         * "...eine nicht modifizierbare Sicht (unmodifiable view) auf die Menge aller Nachfolgerknoten..."
+         * Ist also vermutlich irgendwas als final gesetzt -> immutabler Datentyp
+         *
+         */
 	}
 
-/*	@Override
-	public Iterator iterator() {
-		return new AdjacencyListDirectedGraphIterator();
-	}
-
-	private class AdjacencyListDirectedGraphIterator implements Iterator {
-
-		int counterEdges = 0;
-		Set<Map.Entry<V, Map<V, Double>>> setKnoten = succ.entrySet();
-
-		@Override
-		public boolean hasNext() {
-			if (counterEdges < numberEdge) {
-				return true;
-			}
-			return false;
-		}
-
-		@Override
-		public Object next() {
-
-			for (Map.Entry<V, Map<V, Double>> entry : setKnoten) {
-				counterEdges++;
-				return entry;
-			}
-
-		return null;
-		}
-	}*/
 }
