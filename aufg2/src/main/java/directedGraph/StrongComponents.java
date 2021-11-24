@@ -5,6 +5,8 @@ package directedGraph;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.util.*;
 
 /**
@@ -31,16 +33,31 @@ public class StrongComponents<V> {
 	 * @param g gerichteter Graph.
 	 */
 	public StrongComponents(DirectedGraph<V> g) {
+
+		/* Teilaufgabe a) des Kosaraju-Sharir-Algorithmus */
+
 		DepthFirstOrder<V> gAsDepthTree = new DepthFirstOrder<>(g);
 		List<V> p = gAsDepthTree.postOrder();
 		List<V> pInverted = new ArrayList<V>(p.size());
 
-		for (int i = p.size(); i > 0; i--) {
-			pInverted.add(i, p.get(i));
-		}
-	// Hier müssten die einträge zur map "comp" hinzugefügt werden (siehe test)
+		System.out.println("postOrder p: " + p);
 
-		System.out.println(pInverted);
+		for (int i = p.size(); i > 0; i--) {
+			pInverted.add(p.get(i-1));
+		}
+
+		System.out.println("postOrder Inverted (pInverted): " + pInverted);
+
+		/* Teilaufgabe b) des Kosaraju-Sharir-Algorithmus */
+
+
+
+		/* Teilaufgabe c) des Kosaraju-Sharir-Algorithmus */
+
+
+		// Hier müssten die einträge zur map "comp" hinzugefügt werden (siehe test)
+
+
 	}
 	
 	/**
@@ -53,11 +70,12 @@ public class StrongComponents<V> {
 
 	@Override
 	public String toString() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		System.out.println("toString() noch implementieren");
+		return null;
 	}
-	
+
 	/**
-	 * Liest einen gerichteten Graphen von einer Datei ein. 
+	 * Liest einen gerichteten Graphen von einer Datei ein.
 	 * @param fn Dateiname.
 	 * @return gerichteter Graph.
 	 * @throws FileNotFoundException
@@ -74,7 +92,7 @@ public class StrongComponents<V> {
 		}
 		return g;
 	}
-	
+
 	private static void test1() {
 		DirectedGraph<Integer> g = new AdjacencyListDirectedGraph<>();
 		g.addEdge(1,2);
@@ -82,44 +100,51 @@ public class StrongComponents<V> {
 		g.addEdge(2,1);
 		g.addEdge(2,3);
 		g.addEdge(3,1);
-		
+
 		g.addEdge(1,4);
 		g.addEdge(5,4);
-		
+
 		g.addEdge(5,7);
 		g.addEdge(6,5);
 		g.addEdge(7,6);
-		
+
 		g.addEdge(7,8);
 		g.addEdge(8,2);
-		
+
 		StrongComponents<Integer> sc = new StrongComponents<>(g);
-		
+
 		System.out.println(sc.numberOfComp());  // 4
-		
+
 		System.out.println(sc);
-			// Component 0: 5, 6, 7, 
-        	// Component 1: 8, 
-            // Component 2: 1, 2, 3, 
-            // Component 3: 4, 
+			// Component 0: 5, 6, 7,
+        	// Component 1: 8,
+            // Component 2: 1, 2, 3,
+            // Component 3: 4,
 	}
-	
+
 	private static void test2() throws FileNotFoundException {
-		DirectedGraph<Integer> g = readDirectedGraph(new File("mediumDG.txt"));
+
+		File basePath = new File(System.getProperty("user.dir"));
+		String fileName = "aufg2/src/main/java/directedGraph/mediumDG.txt";
+		File file = new File(basePath, fileName);
+
+		DirectedGraph<Integer> g = readDirectedGraph(file);
+
 		System.out.println(g.getNumberOfVertexes());
 		System.out.println(g.getNumberOfEdges());
 		System.out.println(g);
-		
+
 		System.out.println("");
-		
+
 		StrongComponents<Integer> sc = new StrongComponents<>(g);
 		System.out.println(sc.numberOfComp());  // 10
 		System.out.println(sc);
-		
+
 	}
-	
+
 	public static void main(String[] args) throws FileNotFoundException {
 		test1();
-		test2();
+//		test2();
 	}
+
 }
