@@ -5,8 +5,6 @@ package directedGraph;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
 import java.util.*;
 
 /**
@@ -50,16 +48,56 @@ public class StrongComponents<V> {
 
 		/* Teilaufgabe b) des Kosaraju-Sharir-Algorithmus */
 
-
+		DirectedGraph<V> invertedGraph = g.invert();
 
 		/* Teilaufgabe c) des Kosaraju-Sharir-Algorithmus */
 
+//		DepthFirstOrder<V> tiefenSuchBaumInverted = new DepthFirstOrder<>(invertedGraph);
+
+		tiefenSucheInInvertedPostOrder(invertedGraph, pInverted);
+
+
+		/* TODO
+		 *   Tiefensuche durchführen und einzelne Zusammenhangs-Komponenten jeweils in comp abspeichern
+		 */
 
 		// Hier müssten die einträge zur map "comp" hinzugefügt werden (siehe test)
 
+	}
+
+	private void tiefenSucheInInvertedPostOrder(DirectedGraph<V> g, List<V> invertedList) {
+
+		Set<V> besucht = new TreeSet<V>();
+		int nrComponents = 0;
+
+		for (var vertex : invertedList) {
+
+			if (!besucht.contains(vertex)) {
+				Set<V> setForThisComponent = new TreeSet<>();
+				visitDFRec(vertex, g, besucht, setForThisComponent);
+				comp.put(nrComponents, setForThisComponent);
+				nrComponents++;
+			}
+
+		}
+	}
+
+		/* arbeitet alle Knoten einer Zusammenhangskomponenten ab*/
+	void visitDFRec(V v, DirectedGraph<V> g, Set<V> besucht, Set<V> setForThisComponent) {
+
+		besucht.add(v);
+
+		setForThisComponent.add(v);
+
+		for (var nachbarKnoten : g.getSuccessorVertexSet(v)) {
+
+			if ( ! besucht.contains(nachbarKnoten) )  // w noch nicht besucht
+				visitDFRec(nachbarKnoten, g, besucht, setForThisComponent);
+		}
 
 	}
-	
+
+
 	/**
 	 * 
 	 * @return Anzahl der strengen Komponeneten.
@@ -69,9 +107,28 @@ public class StrongComponents<V> {
 	}
 
 	@Override
+	// output soll folgendermaßen aussehen:
+	//
+	// Component 0: 5, 6, 7,
+	// Component 1: 8,
+	// Component 2: 1, 2, 3,
+	// Component 3: 4,
 	public String toString() {
-		System.out.println("toString() noch implementieren");
-		return null;
+
+		StringBuilder sb = new StringBuilder();
+
+		for (var singleComponent : comp.entrySet()) {
+
+			sb.append("Component " + singleComponent.getKey() + ": ");
+
+			for (var singleEntry : singleComponent.getValue()) {
+				sb.append(singleEntry + ", ");
+			}
+			sb.append("\n");
+
+		}
+
+		return sb.toString();
 	}
 
 	/**
@@ -113,7 +170,7 @@ public class StrongComponents<V> {
 
 		StrongComponents<Integer> sc = new StrongComponents<>(g);
 
-		System.out.println(sc.numberOfComp());  // 4
+		System.out.println("sc.numberOfComp(): " + sc.numberOfComp());  // 4
 
 		System.out.println(sc);
 			// Component 0: 5, 6, 7,
@@ -137,14 +194,14 @@ public class StrongComponents<V> {
 		System.out.println("");
 
 		StrongComponents<Integer> sc = new StrongComponents<>(g);
-		System.out.println(sc.numberOfComp());  // 10
+		System.out.println("sc.numberOfComp(): " + sc.numberOfComp());  // 10
 		System.out.println(sc);
 
 	}
 
 	public static void main(String[] args) throws FileNotFoundException {
 		test1();
-//		test2();
+		test2();
 	}
 
 }
